@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+/* ============================================================
+   FerrazCode — Design tokens (tema dark futurista)
+   ============================================================ */
+@theme {
+  --color-bg: #06060c;
+  --color-surface: #0c0c16;
+  --color-surface-2: #12121f;
+  --color-foreground: #e8e8f2;
+  --color-muted: #9a9ab2;
+  --color-border: rgba(255, 255, 255, 0.08);
+
+  --color-brand: #8b5cf6;
+  --color-brand-600: #7c3aed;
+  --color-cyan: #22d3ee;
+  --color-fuchsia: #e879f9;
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+/* ------------------------------------------------------------ Base */
+:root {
+  --background: #06060c;
+  --foreground: #e8e8f2;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.35);
+  color: #fff;
+}
+
+/* Remove a setinha padrão do <details> (usado no FAQ) */
+summary {
+  list-style: none;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #06060c;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7c3aed, #22d3ee);
+  border-radius: 999px;
+}
+
+/* ============================================================
+   Utilitários reutilizáveis
+   ============================================================ */
+
+/* Texto com gradiente animado */
+.text-gradient {
+  background: linear-gradient(120deg, #c4b5fd, #8b5cf6, #22d3ee, #e879f9);
+  background-size: 250% 250%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-pan 8s ease infinite;
+}
+
+/* Cartão de vidro */
+.glass {
+  background: rgba(18, 18, 31, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Borda com gradiente (via máscara) */
+.border-gradient {
+  position: relative;
+}
+.border-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.7), rgba(34, 211, 238, 0.5), transparent 70%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Brilho neon */
+.glow-brand {
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2), 0 8px 40px -8px rgba(124, 58, 237, 0.55);
+}
+
+/* Campos de formulário */
+.input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.7rem 0.9rem;
+  font-size: 0.9rem;
+  color: #e8e8f2;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.input::placeholder {
+  color: #6b6b82;
+}
+.input:focus {
+  border-color: rgba(139, 92, 246, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+}
+.input option {
+  background: #12121f;
+  color: #e8e8f2;
+}
+
+/* Fundo de grade (grid) */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 50%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 50%, transparent 100%);
+}
+
+/* ============================================================
+   Animações
+   ============================================================ */
+@keyframes gradient-pan {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.08);
+  }
+}
+
+@keyframes float-slow-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-50px, 40px) scale(1.12);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes particle {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(-22px);
+    opacity: 0.6;
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 14s ease-in-out infinite;
+}
+.animate-float-slow-2 {
+  animation: float-slow-2 18s ease-in-out infinite;
+}
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+.animate-particle {
+  animation: particle linear infinite;
+}
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+/* Respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
