@@ -17,8 +17,7 @@ export default async function AdminPage() {
   if (!user) redirect("/login");
   if (!isAdminEmail(user.email)) redirect("/"); // não é admin → manda pra home
 
-  const userList = users.all();
-  const messageList = messages.all();
+  const [userList, messageList] = await Promise.all([users.all(), messages.all()]);
 
   return (
     <>

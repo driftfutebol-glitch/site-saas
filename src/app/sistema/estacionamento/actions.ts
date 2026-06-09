@@ -39,11 +39,11 @@ export async function registrarEntrada(
   const placa = parsed.data.placa.toUpperCase();
   const vaga = parsed.data.vaga ? parsed.data.vaga.toUpperCase() : null;
 
-  if (parking.getActiveByPlaca(user.id, placa)) {
+  if (await parking.getActiveByPlaca(user.id, placa)) {
     return { ok: false, error: `O veículo ${placa} já está no pátio.` };
   }
 
-  parking.createEntry({
+  await parking.createEntry({
     id: randomUUID(),
     user_id: user.id,
     placa,
@@ -61,12 +61,12 @@ export async function registrarSaida(formData: FormData): Promise<void> {
   if (!user) return;
 
   const id = String(formData.get("id") ?? "");
-  const session = parking.getById(id, user.id);
+  const session = await parking.getById(id, user.id);
   if (!session || session.saida) return; // não existe ou já saiu
 
   const saida = new Date().toISOString();
   const valor = calcValor(session.entrada, saida);
-  parking.close(id, user.id, saida, valor);
+  await parking.close(id, user.id, saida, valor);
 
   revalidatePath(PATH);
 }

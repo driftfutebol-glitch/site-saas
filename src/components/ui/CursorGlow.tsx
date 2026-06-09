@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 /** Um brilho que segue o mouse (só em telas com mouse e sem "reduzir movimento"). */
@@ -9,14 +9,12 @@ export function CursorGlow() {
   const y = useMotionValue(-300);
   const sx = useSpring(x, { stiffness: 200, damping: 28, mass: 0.4 });
   const sy = useSpring(y, { stiffness: 200, damping: 28, mass: 0.4 });
-  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     const fine = window.matchMedia("(pointer: fine)").matches;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!fine || reduce) return;
 
-    setEnabled(true);
     const move = (e: MouseEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
@@ -24,8 +22,6 @@ export function CursorGlow() {
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
   }, [x, y]);
-
-  if (!enabled) return null;
 
   return (
     <motion.div

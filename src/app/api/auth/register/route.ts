@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
   const { name, email, password } = parsed.data;
 
   try {
-    if (users.findByEmail(email)) {
+    if (await users.findByEmail(email)) {
       // Tradeoff DELIBERADO: avisar que o e-mail já existe revela a conta
       // (enumeração), mas o usuário precisa saber disso para ir fazer login.
       // O login, ao contrário, é blindado contra enumeração (msg genérica + tempo constante).
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 
     const id = randomUUID();
     const password_hash = await hashPassword(password);
-    users.create({ id, name, email, password_hash, image: null, provider: "credentials", google_sub: null });
+    await users.create({ id, name, email, password_hash, image: null, provider: "credentials", google_sub: null });
 
     // Já entra logado após o cadastro.
     const token = await createSessionToken({ id, email, name });

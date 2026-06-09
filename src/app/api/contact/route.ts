@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
   try {
     // Salva a mensagem no banco para você ver depois no painel /admin.
     // (Dá para também enviar e-mail/WhatsApp aqui no futuro — Resend, Nodemailer, etc.)
-    messages.create({
+    await messages.create({
       id: randomUUID(),
       name,
       email,

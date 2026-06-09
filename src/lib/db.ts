@@ -1,86 +1,101 @@
-import Database from "better-sqlite3";
+import { createClient } from "@libsql/client";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
 /**
- * Banco de dados local (SQLite via better-sqlite3).
+ * Banco de dados via libSQL (SQLite).
+ *  - LOCAL (dev):  DATABASE_URL ausente → usa um arquivo:  file:./data/app.db
+ *  - NUVEM (prod): DATABASE_URL = libsql://...  (Turso) + DATABASE_AUTH_TOKEN
  *
- * Segurança: TODAS as consultas usam parâmetros (`?` / `@nome`), nunca
- * concatenação de strings — isso torna SQL injection impossível aqui.
- *
- * O padrão `globalThis` evita abrir várias conexões durante o hot-reload do dev.
- * Em produção de larga escala, troque por Postgres (a interface `users` abaixo
- * isola o resto do código dessa mudança).
+ * Mesma linguagem SQL do SQLite, agora com consultas ASSÍNCRONAS (await).
+ * Segurança: TODAS as consultas usam parâmetros (?), nunca concatenação → sem SQL injection.
  */
 
-const dataDir = path.join(process.cwd(), "data");
-mkdirSync(dataDir, { recursive: true });
-const dbPath = path.join(dataDir, "app.db");
+const url = process.env.DATABASE_URL ?? (process.env.VERCEL ? "" : "file:./data/app.db");
+const authToken = process.env.DATABASE_AUTH_TOKEN;
 
-const globalForDb = globalThis as unknown as { _db?: Database.Database };
-
-function createDb(): Database.Database {
-  const db = new Database(dbPath);
-  db.pragma("journal_mode = WAL");
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id            TEXT PRIMARY KEY,
-      name          TEXT,
-      email         TEXT UNIQUE NOT NULL,
-      password_hash TEXT,
-      image         TEXT,
-      provider      TEXT NOT NULL DEFAULT 'credentials',
-      google_sub    TEXT,
-      created_at    TEXT NOT NULL DEFAULT (datetime('now'))
-    );
-  `);
-
-  // Migração para bancos criados antes da coluna google_sub existir.
-  try {
-    db.exec("ALTER TABLE users ADD COLUMN google_sub TEXT");
-  } catch {
-    // a coluna já existe — tudo certo
-  }
-
-  // O `sub` do Google é o identificador IMUTÁVEL da conta (o e-mail pode mudar).
-  // Índice único só para valores não-nulos (vários usuários sem Google = vários NULL).
-  db.exec(
-    "CREATE UNIQUE INDEX IF NOT EXISTS idx_users_google_sub ON users(google_sub) WHERE google_sub IS NOT NULL",
+if (!url) {
+  throw new Error(
+    "DATABASE_URL ausente. No Vercel, configure DATABASE_URL e DATABASE_AUTH_TOKEN com os dados do Turso/libSQL.",
   );
-
-  // Mensagens enviadas pelo formulário de contato (visíveis no /admin).
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS messages (
-      id         TEXT PRIMARY KEY,
-      name       TEXT NOT NULL,
-      email      TEXT NOT NULL,
-      phone      TEXT,
-      service    TEXT,
-      message    TEXT NOT NULL,
-      created_at TEXT NOT NULL DEFAULT (datetime('now'))
-    );
-  `);
-
-  // Sistema REAL de estacionamento — cada registro pertence a um usuário (user_id).
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS parking_sessions (
-      id         TEXT PRIMARY KEY,
-      user_id    TEXT NOT NULL,
-      placa      TEXT NOT NULL,
-      vaga       TEXT,
-      entrada    TEXT NOT NULL,
-      saida      TEXT,
-      valor      REAL,
-      created_at TEXT NOT NULL DEFAULT (datetime('now'))
-    );
-  `);
-  db.exec("CREATE INDEX IF NOT EXISTS idx_parking_user ON parking_sessions(user_id)");
-
-  return db;
 }
 
-const db = globalForDb._db ?? createDb();
-if (process.env.NODE_ENV !== "production") globalForDb._db = db;
+if (url.startsWith("libsql://") && !authToken) {
+  throw new Error("DATABASE_AUTH_TOKEN ausente para o banco libSQL remoto.");
+}
+
+// Só cria a pasta local quando o banco é um arquivo (na nuvem não há filesystem gravável).
+if (url.startsWith("file:")) {
+  mkdirSync(path.join(process.cwd(), "data"), { recursive: true });
+}
+
+const globalForDb = globalThis as unknown as { _libsql?: ReturnType<typeof createClient> };
+const client = globalForDb._libsql ?? createClient({ url, authToken });
+if (process.env.NODE_ENV !== "production") globalForDb._libsql = client;
+
+const SCHEMA = `
+  CREATE TABLE IF NOT EXISTS users (
+    id            TEXT PRIMARY KEY,
+    name          TEXT,
+    email         TEXT UNIQUE NOT NULL,
+    password_hash TEXT,
+    image         TEXT,
+    provider      TEXT NOT NULL DEFAULT 'credentials',
+    google_sub    TEXT,
+    created_at    TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_users_google_sub ON users(google_sub) WHERE google_sub IS NOT NULL;
+
+  CREATE TABLE IF NOT EXISTS messages (
+    id         TEXT PRIMARY KEY,
+    name       TEXT NOT NULL,
+    email      TEXT NOT NULL,
+    phone      TEXT,
+    service    TEXT,
+    message    TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS parking_sessions (
+    id         TEXT PRIMARY KEY,
+    user_id    TEXT NOT NULL,
+    placa      TEXT NOT NULL,
+    vaga       TEXT,
+    entrada    TEXT NOT NULL,
+    saida      TEXT,
+    valor      REAL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  CREATE INDEX IF NOT EXISTS idx_parking_user ON parking_sessions(user_id);
+`;
+
+// Garante que as tabelas existem (roda uma vez por instância).
+const ready: Promise<unknown> =
+  (globalForDb as { _ready?: Promise<unknown> })._ready ?? client.executeMultiple(SCHEMA);
+(globalForDb as { _ready?: Promise<unknown> })._ready = ready;
+
+type Arg = string | number | null;
+
+async function all<T>(sql: string, args: Arg[] = []): Promise<T[]> {
+  await ready;
+  const r = await client.execute({ sql, args });
+  return r.rows as unknown as T[];
+}
+async function get<T>(sql: string, args: Arg[] = []): Promise<T | undefined> {
+  return (await all<T>(sql, args))[0];
+}
+async function run(sql: string, args: Arg[] = []): Promise<void> {
+  await ready;
+  await client.execute({ sql, args });
+}
+async function num(sql: string, args: Arg[] = []): Promise<number> {
+  const r = await get<{ v: number }>(sql, args);
+  return Number(r?.v ?? 0);
+}
+
+// ============================================================
+//  Usuários
+// ============================================================
 
 export type User = {
   id: string;
@@ -103,7 +118,6 @@ export type NewUser = {
   google_sub: string | null;
 };
 
-/** Visão segura de usuário para o painel admin (sem hash de senha). */
 export type AdminUser = {
   id: string;
   name: string | null;
@@ -111,6 +125,37 @@ export type AdminUser = {
   provider: string;
   created_at: string;
 };
+
+export const users = {
+  findByEmail(email: string) {
+    return get<User>("SELECT * FROM users WHERE email = ?", [email.toLowerCase()]);
+  },
+  findById(id: string) {
+    return get<User>("SELECT * FROM users WHERE id = ?", [id]);
+  },
+  findByGoogleSub(sub: string) {
+    return get<User>("SELECT * FROM users WHERE google_sub = ?", [sub]);
+  },
+  create(u: NewUser) {
+    return run(
+      `INSERT INTO users (id, name, email, password_hash, image, provider, google_sub)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [u.id, u.name, u.email.toLowerCase(), u.password_hash, u.image, u.provider, u.google_sub],
+    );
+  },
+  linkGoogleSub(id: string, sub: string) {
+    return run("UPDATE users SET google_sub = ? WHERE id = ?", [sub, id]);
+  },
+  all() {
+    return all<AdminUser>(
+      "SELECT id, name, email, provider, created_at FROM users ORDER BY created_at DESC",
+    );
+  },
+};
+
+// ============================================================
+//  Mensagens de contato
+// ============================================================
 
 export type Message = {
   id: string;
@@ -131,65 +176,21 @@ export type NewMessage = {
   message: string;
 };
 
-export const users = {
-  findByEmail(email: string): User | undefined {
-    return db
-      .prepare("SELECT * FROM users WHERE email = ?")
-      .get(email.toLowerCase()) as User | undefined;
-  },
-
-  findById(id: string): User | undefined {
-    return db.prepare("SELECT * FROM users WHERE id = ?").get(id) as User | undefined;
-  },
-
-  findByGoogleSub(sub: string): User | undefined {
-    return db.prepare("SELECT * FROM users WHERE google_sub = ?").get(sub) as User | undefined;
-  },
-
-  create(user: NewUser): void {
-    db.prepare(
-      `INSERT INTO users (id, name, email, password_hash, image, provider, google_sub)
-       VALUES (@id, @name, @email, @password_hash, @image, @provider, @google_sub)`,
-    ).run({ ...user, email: user.email.toLowerCase() });
-  },
-
-  /** Vincula o `sub` do Google a uma conta já existente (mesmo e-mail verificado). */
-  linkGoogleSub(id: string, sub: string): void {
-    db.prepare("UPDATE users SET google_sub = ? WHERE id = ?").run(sub, id);
-  },
-
-  /** Lista para o painel admin — SEM o hash de senha. Mais recentes primeiro. */
-  all(): AdminUser[] {
-    return db
-      .prepare("SELECT id, name, email, provider, created_at FROM users ORDER BY created_at DESC")
-      .all() as AdminUser[];
-  },
-
-  count(): number {
-    return (db.prepare("SELECT COUNT(*) AS c FROM users").get() as { c: number }).c;
-  },
-};
-
 export const messages = {
-  create(msg: NewMessage): void {
-    db.prepare(
+  create(m: NewMessage) {
+    return run(
       `INSERT INTO messages (id, name, email, phone, service, message)
-       VALUES (@id, @name, @email, @phone, @service, @message)`,
-    ).run(msg);
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [m.id, m.name, m.email, m.phone, m.service, m.message],
+    );
   },
-
-  /** Todas as mensagens, mais recentes primeiro (para o painel admin). */
-  all(): Message[] {
-    return db.prepare("SELECT * FROM messages ORDER BY created_at DESC").all() as Message[];
-  },
-
-  count(): number {
-    return (db.prepare("SELECT COUNT(*) AS c FROM messages").get() as { c: number }).c;
+  all() {
+    return all<Message>("SELECT * FROM messages ORDER BY created_at DESC");
   },
 };
 
 // ============================================================
-//  Sistema de Estacionamento (dados reais, por usuário)
+//  Sistema de Estacionamento (por usuário)
 // ============================================================
 
 export type ParkingSession = {
@@ -197,81 +198,62 @@ export type ParkingSession = {
   user_id: string;
   placa: string;
   vaga: string | null;
-  entrada: string; // ISO
-  saida: string | null; // ISO (null = ainda no pátio)
-  valor: number | null; // calculado na saída
+  entrada: string;
+  saida: string | null;
+  valor: number | null;
   created_at: string;
 };
 
 export const parking = {
-  createEntry(s: { id: string; user_id: string; placa: string; vaga: string | null; entrada: string }): void {
-    db.prepare(
+  createEntry(s: { id: string; user_id: string; placa: string; vaga: string | null; entrada: string }) {
+    return run(
       `INSERT INTO parking_sessions (id, user_id, placa, vaga, entrada)
-       VALUES (@id, @user_id, @placa, @vaga, @entrada)`,
-    ).run(s);
+       VALUES (?, ?, ?, ?, ?)`,
+      [s.id, s.user_id, s.placa, s.vaga, s.entrada],
+    );
   },
-
-  /** Veículos atualmente no pátio (sem saída), do usuário. */
-  listActive(userId: string): ParkingSession[] {
-    return db
-      .prepare("SELECT * FROM parking_sessions WHERE user_id = ? AND saida IS NULL ORDER BY entrada DESC")
-      .all(userId) as ParkingSession[];
+  listActive(userId: string) {
+    return all<ParkingSession>(
+      "SELECT * FROM parking_sessions WHERE user_id = ? AND saida IS NULL ORDER BY entrada DESC",
+      [userId],
+    );
   },
-
-  /** Histórico de saídas (mais recentes primeiro). */
-  listClosed(userId: string, limit = 20): ParkingSession[] {
-    return db
-      .prepare("SELECT * FROM parking_sessions WHERE user_id = ? AND saida IS NOT NULL ORDER BY saida DESC LIMIT ?")
-      .all(userId, limit) as ParkingSession[];
+  listClosed(userId: string, limit = 20) {
+    return all<ParkingSession>(
+      "SELECT * FROM parking_sessions WHERE user_id = ? AND saida IS NOT NULL ORDER BY saida DESC LIMIT ?",
+      [userId, limit],
+    );
   },
-
-  getById(id: string, userId: string): ParkingSession | undefined {
-    return db
-      .prepare("SELECT * FROM parking_sessions WHERE id = ? AND user_id = ?")
-      .get(id, userId) as ParkingSession | undefined;
+  getById(id: string, userId: string) {
+    return get<ParkingSession>("SELECT * FROM parking_sessions WHERE id = ? AND user_id = ?", [id, userId]);
   },
-
-  /** Já existe esse veículo no pátio? (evita entrada duplicada) */
-  getActiveByPlaca(userId: string, placa: string): ParkingSession | undefined {
-    return db
-      .prepare("SELECT * FROM parking_sessions WHERE user_id = ? AND placa = ? AND saida IS NULL")
-      .get(userId, placa) as ParkingSession | undefined;
+  getActiveByPlaca(userId: string, placa: string) {
+    return get<ParkingSession>(
+      "SELECT * FROM parking_sessions WHERE user_id = ? AND placa = ? AND saida IS NULL",
+      [userId, placa],
+    );
   },
-
-  close(id: string, userId: string, saida: string, valor: number): void {
-    db.prepare("UPDATE parking_sessions SET saida = ?, valor = ? WHERE id = ? AND user_id = ?").run(
+  close(id: string, userId: string, saida: string, valor: number) {
+    return run("UPDATE parking_sessions SET saida = ?, valor = ? WHERE id = ? AND user_id = ?", [
       saida,
       valor,
       id,
       userId,
+    ]);
+  },
+  activeCount(userId: string) {
+    return num("SELECT COUNT(*) AS v FROM parking_sessions WHERE user_id = ? AND saida IS NULL", [userId]);
+  },
+  revenueOn(userId: string, dateStr: string) {
+    return num(
+      "SELECT COALESCE(SUM(valor), 0) AS v FROM parking_sessions WHERE user_id = ? AND saida IS NOT NULL AND substr(saida, 1, 10) = ?",
+      [userId, dateStr],
     );
   },
-
-  activeCount(userId: string): number {
-    return (
-      db.prepare("SELECT COUNT(*) AS c FROM parking_sessions WHERE user_id = ? AND saida IS NULL").get(userId) as {
-        c: number;
-      }
-    ).c;
-  },
-
-  /** Soma do faturamento das saídas em uma data (YYYY-MM-DD). */
-  revenueOn(userId: string, dateStr: string): number {
-    return (
-      db
-        .prepare(
-          "SELECT COALESCE(SUM(valor), 0) AS s FROM parking_sessions WHERE user_id = ? AND saida IS NOT NULL AND substr(saida, 1, 10) = ?",
-        )
-        .get(userId, dateStr) as { s: number }
-    ).s;
-  },
-
-  /** Quantas entradas registradas em uma data (YYYY-MM-DD). */
-  entriesOn(userId: string, dateStr: string): number {
-    return (
-      db
-        .prepare("SELECT COUNT(*) AS c FROM parking_sessions WHERE user_id = ? AND substr(entrada, 1, 10) = ?")
-        .get(userId, dateStr) as { c: number }
-    ).c;
+  entriesOn(userId: string, dateStr: string) {
+    return num(
+      "SELECT COUNT(*) AS v FROM parking_sessions WHERE user_id = ? AND substr(entrada, 1, 10) = ?",
+      [userId, dateStr],
+    );
   },
 };

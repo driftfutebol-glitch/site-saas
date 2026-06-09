@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { SquareParking, Car, CircleDollarSign, LogIn, LogOut } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { parking } from "@/lib/db";
@@ -16,17 +17,21 @@ export default async function EstacionamentoSistema() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
-  const ativos = parking.listActive(user.id);
-  const historico = parking.listClosed(user.id, 15);
-  const hoje = new Date().toISOString().slice(0, 10);
-  const now = Date.now();
-  const nowIso = new Date(now).toISOString();
+  await connection();
+  const nowDate = new Date();
+  const hoje = nowDate.toISOString().slice(0, 10);
+  const now = nowDate.getTime();
+  const nowIso = nowDate.toISOString();
+  const [ativos, historico, faturamentoHoje, entradasHoje] = await Promise.all([
+    parking.listActive(user.id),
+    parking.listClosed(user.id, 15),
+    parking.revenueOn(user.id, hoje),
+    parking.entriesOn(user.id, hoje),
+  ]);
 
   const ocupadas = ativos.length;
   const livres = Math.max(0, TOTAL_SPOTS - ocupadas);
   const pct = Math.round((ocupadas / TOTAL_SPOTS) * 100);
-  const faturamentoHoje = parking.revenueOn(user.id, hoje);
-  const entradasHoje = parking.entriesOn(user.id, hoje);
 
   return (
     <div className="min-h-screen bg-[#0a0b12] text-white">

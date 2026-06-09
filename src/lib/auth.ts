@@ -87,7 +87,7 @@ export async function getCurrentUser(): Promise<User | null> {
   const session = await verifySessionToken(token);
   if (!session) return null;
 
-  return users.findById(session.id) ?? null;
+  return (await users.findById(session.id)) ?? null;
 }
 
 // --- Senhas -----------------------------------------------------------------

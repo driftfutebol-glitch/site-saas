@@ -28,6 +28,32 @@ npm run lint     # checa problemas no código
 
 ---
 
+## Deploy no Vercel
+
+O projeto já está preparado para Vercel, mas as rotas com login, contato,
+admin e estacionamento precisam de um banco remoto. Use Turso/libSQL em
+produção e configure estas variáveis no painel do Vercel:
+
+```bash
+AUTH_SECRET=
+APP_URL=https://seu-projeto.vercel.app
+DATABASE_URL=libsql://...
+DATABASE_AUTH_TOKEN=
+ADMIN_EMAILS=seu@email.com
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+```
+
+Se ativar o login com Google, cadastre também este Redirect URI no Google Cloud:
+
+```text
+https://seu-projeto.vercel.app/api/auth/google/callback
+```
+
+Build command: `npm run build`.
+
+---
+
 ## ✏️ Onde editar o quê
 
 | Quero mudar... | Arquivo |

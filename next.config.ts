@@ -24,9 +24,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
 
-  // O banco (better-sqlite3) é um módulo nativo — não deve ser empacotado
-  // pelo Turbopack; roda só no servidor.
-  serverExternalPackages: ["better-sqlite3"],
+  // O banco (libSQL) não deve ser empacotado pelo Turbopack; roda só no servidor.
+  serverExternalPackages: ["@libsql/client", "libsql"],
 
   async headers() {
     return [

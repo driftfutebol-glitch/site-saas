@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const user = users.findByEmail(email);
+    const user = await users.findByEmail(email);
 
     // Comparação SEMPRE executada (contra um hash isca se o usuário não existe)
     // para o tempo de resposta ser constante — impede descobrir e-mails cadastrados.

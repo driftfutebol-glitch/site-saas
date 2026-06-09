@@ -37,15 +37,15 @@ export async function GET(req: NextRequest) {
     // Identidade ancorada no `sub` (id imutável do Google), não no e-mail (que pode mudar):
     //  1) procura pelo sub;  2) na 1ª vez, cai pro e-mail e vincula o sub à conta;
     //  3) senão, cria conta nova já com o sub.
-    let user = users.findByGoogleSub(profile.sub);
+    let user = await users.findByGoogleSub(profile.sub);
     if (!user) {
-      const existing = users.findByEmail(profile.email);
+      const existing = await users.findByEmail(profile.email);
       if (existing) {
-        if (!existing.google_sub) users.linkGoogleSub(existing.id, profile.sub);
+        if (!existing.google_sub) await users.linkGoogleSub(existing.id, profile.sub);
         user = existing;
       } else {
         const id = randomUUID();
-        users.create({
+        await users.create({
           id,
           name: profile.name,
           email: profile.email,
@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
           provider: "google",
           google_sub: profile.sub,
         });
-        user = users.findById(id)!;
+        user = (await users.findById(id))!;
       }
     }
 

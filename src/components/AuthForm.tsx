@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -8,27 +8,12 @@ import { loginSchema, signupSchema } from "@/lib/auth-schema";
 
 type Mode = "login" | "signup";
 
-const erroMessages: Record<string, string> = {
-  google_indisponivel:
-    "O login com Google ainda não foi configurado. Use e-mail e senha por enquanto. 😉",
-  google_state: "Sua sessão de login expirou. Tente novamente.",
-  google_email: "Não foi possível confirmar seu e-mail no Google.",
-  google: "Não foi possível entrar com o Google. Tente novamente.",
-};
-
-export function AuthForm({ mode }: { mode: Mode }) {
+export function AuthForm({ mode, initialError = "" }: { mode: Mode; initialError?: string }) {
   const router = useRouter();
   const isSignup = mode === "signup";
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
-  const [generalError, setGeneralError] = useState("");
-
-  // Mostra mensagem se voltou do Google com erro (?erro=...).
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const erro = params.get("erro");
-    if (erro && erroMessages[erro]) setGeneralError(erroMessages[erro]);
-  }, []);
+  const [generalError, setGeneralError] = useState(initialError);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
