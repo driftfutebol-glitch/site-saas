@@ -24,9 +24,6 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
 
-  // O banco (libSQL) não deve ser empacotado pelo Turbopack; roda só no servidor.
-  serverExternalPackages: ["@libsql/client", "libsql"],
-
   async headers() {
     return [
       {
