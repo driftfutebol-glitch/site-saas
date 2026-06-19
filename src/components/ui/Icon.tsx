@@ -2,13 +2,19 @@ import {
   AppWindow,
   Boxes,
   Car,
+  Clock,
+  Database,
   Globe,
   Headset,
+  Heart,
   Layers,
   MessageSquare,
+  Palette,
+  Server,
   ShieldCheck,
   Sparkles,
   UtensilsCrossed,
+  Workflow,
   Zap,
   type LucideIcon,
 } from "lucide-react";
@@ -26,6 +32,12 @@ const icons: Record<string, LucideIcon> = {
   Zap,
   Layers,
   Headset,
+  Workflow,
+  Palette,
+  Server,
+  Database,
+  Clock,
+  Heart,
 };
 
 type IconProps = {

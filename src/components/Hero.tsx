@@ -28,7 +28,7 @@ export function Hero() {
         <motion.div variants={item} className="flex justify-center">
           <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted">
             <Sparkles size={15} className="text-cyan" />
-            Software house • sistemas sob medida
+            Desenvolvimento fullstack • sistemas & automações
           </span>
         </motion.div>
 
@@ -36,16 +36,17 @@ export function Hero() {
           variants={item}
           className="mt-7 text-balance text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl"
         >
-          Transformamos sua ideia em{" "}
-          <span className="text-gradient">software de verdade</span>
+          Sua ideia vira{" "}
+          <span className="text-gradient">software que economiza seu tempo</span>
         </motion.h1>
 
         <motion.p
           variants={item}
           className="mx-auto mt-6 max-w-2xl text-balance text-lg text-muted md:text-xl"
         >
-          {site.tagline}. Sistemas de gestão, sites e aplicativos desktop —
-          rápidos, bonitos e <span className="text-white">seguros contra invasões</span>.
+          Sistemas de gestão, sites, apps desktop e{" "}
+          <span className="text-white">automações</span> feitos do zero — do banco de dados
+          ao último pixel, rápidos, bonitos e <span className="text-white">seguros</span>.
         </motion.p>
 
         <motion.div
@@ -70,7 +71,10 @@ export function Hero() {
         </motion.div>
 
         <motion.p variants={item} className="mt-5 text-sm text-muted">
-          🎁 Teste grátis de até 15 dias · sem compromisso
+          Teste grátis de até 15 dias · sem compromisso ·{" "}
+          <Link href="/fundador" className="text-cyan underline-offset-4 hover:underline">
+            conheça o fundador
+          </Link>
         </motion.p>
       </motion.div>
 
@@ -87,12 +91,12 @@ export function Hero() {
             <span className="h-3 w-3 rounded-full bg-red-400/80" />
             <span className="h-3 w-3 rounded-full bg-yellow-400/80" />
             <span className="h-3 w-3 rounded-full bg-green-400/80" />
-            <span className="ml-3 font-mono text-xs text-muted">sistema.ts — {site.name}</span>
+            <span className="ml-3 font-mono text-xs text-muted">seuNegocio.ts — {site.name}</span>
           </div>
           <pre className="overflow-x-auto p-5 text-left font-mono text-[13px] leading-relaxed">
             <code>
               <span className="text-fuchsia">const</span>{" "}
-              <span className="text-cyan">negocio</span> = {"{"}
+              <span className="text-cyan">seuNegocio</span> = {"{"}
               {"\n"}
               {"  "}seguro<span className="text-muted">:</span>{" "}
               <span className="text-green-300">true</span>,
@@ -100,16 +104,17 @@ export function Hero() {
               {"  "}rapido<span className="text-muted">:</span>{" "}
               <span className="text-green-300">true</span>,
               {"\n"}
-              {"  "}bonito<span className="text-muted">:</span>{" "}
+              {"  "}automatizado<span className="text-muted">:</span>{" "}
               <span className="text-green-300">true</span>,
               {"\n"}
-              {"  "}feitoPra<span className="text-muted">:</span>{" "}
-              <span className="text-yellow-200">&quot;voce&quot;</span>,
+              {"  "}feitoPor<span className="text-muted">:</span>{" "}
+              <span className="text-yellow-200">&quot;Pedro Ferraz&quot;</span>,
               {"\n"}
               {"}"};
               {"\n\n"}
               <span className="text-fuchsia">export default</span>{" "}
-              <span className="text-cyan">negocio</span>;
+              <span className="text-cyan">seuNegocio</span>;
+              <span className="animate-blink ml-0.5 inline-block w-2 border-l-2 border-cyan align-middle">&nbsp;</span>
             </code>
           </pre>
           </div>

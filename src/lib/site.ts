@@ -6,9 +6,9 @@
 
 export const site = {
   name: "FerrazCode",
-  tagline: "Software sob medida que impulsiona o seu negócio",
+  tagline: "Software sob medida e automações que devolvem o seu tempo",
   description:
-    "Sistemas de gestão, sites e aplicativos desktop feitos do zero — rápidos, bonitos e seguros.",
+    "Sistemas de gestão, sites, apps desktop e automações feitos do zero por um desenvolvedor fullstack — rápidos, bonitos e seguros.",
   email: "driftfutebol@gmail.com",
   phone: "+55 (13) 97421-2579",
   whatsapp: "5513974212579",
@@ -50,6 +50,13 @@ export const services: Service[] = [
     features: ["Entradas e saídas", "Alertas automáticos", "Relatórios e dashboards"],
   },
   {
+    icon: "Workflow",
+    title: "Automação de Processos",
+    description:
+      "Tarefas repetitivas no automático: relatórios, planilhas, e-mails e integração entre sistemas. Você economiza horas toda semana.",
+    features: ["Robôs que fazem o trabalho chato", "Integração entre sistemas", "Menos erro, mais tempo livre"],
+  },
+  {
     icon: "Globe",
     title: "Criação de Sites",
     description:
@@ -88,27 +95,27 @@ export type Differentiator = {
 export const differentiators: Differentiator[] = [
   {
     icon: "ShieldCheck",
-    title: "Segurança de verdade",
+    title: "Segurança levada a sério",
     description:
-      "Proteção contra SQL injection, XSS e invasões. Validação rigorosa em todo dado que entra.",
+      "Senhas criptografadas, proteção contra invasões e injection, e validação em todo dado que entra. O básico bem feito.",
   },
   {
     icon: "Zap",
-    title: "Performance de elite",
+    title: "Rápido de verdade",
     description:
-      "Stack moderna (Next.js + React) com carregamento instantâneo e experiência fluida.",
+      "Stack moderna (Next.js + React) com carregamento abaixo de 1 segundo. Nada de tela travando ou rodinha girando.",
   },
   {
     icon: "Layers",
-    title: "Código limpo e escalável",
+    title: "Fullstack do início ao fim",
     description:
-      "Arquitetura organizada que cresce junto com o seu negócio, sem virar uma bagunça.",
+      "Do banco de dados ao último pixel, é tudo cuidado pela mesma pessoa. Nada se perde entre fornecedores.",
   },
   {
     icon: "Headset",
-    title: "Suporte humano",
+    title: "Você fala direto comigo",
     description:
-      "Você fala direto com quem desenvolve. Nada de robô ou fila de atendimento sem fim.",
+      "Sem intermediário, sem fila, sem robô. Quem atende é o Pedro — a mesma pessoa que programa o seu sistema.",
   },
 ];
 
@@ -143,8 +150,8 @@ export const steps: Step[] = [
 
 export const stats = [
   { value: "100%", label: "Código sob medida" },
+  { value: "+10h", label: "Economizadas por semana" },
   { value: "24/7", label: "Sistemas no ar" },
-  { value: "<1s", label: "Tempo de carregamento" },
   { value: "0", label: "Brechas conhecidas" },
 ];
 
@@ -154,7 +161,7 @@ export const navLinks = [
   { href: "/servicos", label: "Serviços" },
   { href: "/preview", label: "Demos" },
   { href: "/planos", label: "Planos" },
-  { href: "/sobre", label: "Sobre" },
+  { href: "/fundador", label: "Fundador" },
   { href: "/contato", label: "Contato" },
 ];
 
@@ -256,6 +263,7 @@ export const about = {
     "A FerrazCode nasceu de uma ideia simples: software de qualidade não devia ser privilégio de grande empresa.",
   paragraphs: [
     "Criamos sistemas sob medida para negócios reais — estacionamentos, restaurantes, lojas e muito mais. Nada de template genérico: cada projeto é desenhado para resolver o SEU problema.",
+    "Como desenvolvimento fullstack, cuidamos de tudo: a interface bonita que o cliente vê, o servidor e o banco de dados por trás, e as automações que tiram as tarefas repetitivas do seu caminho.",
     "Aqui você fala direto com quem desenvolve. Sem intermediário, sem fila de atendimento. Isso significa decisões rápidas, código limpo e um sistema que realmente encaixa no seu dia a dia.",
     "E, acima de tudo, levamos segurança a sério. Cada linha é escrita pensando em proteger o seu negócio e os seus clientes.",
   ],
@@ -276,3 +284,90 @@ export const trial = {
   cta: "Quero meu teste grátis",
   note: "Sem cartão de crédito. Sem pegadinha.",
 };
+
+/* ============================================================
+   FUNDADOR — Pedro Ferraz
+   ============================================================ */
+
+export const founder = {
+  name: "Pedro Ferraz",
+  initials: "PF",
+  role: "Fundador & Desenvolvedor Fullstack",
+  location: "Baixada Santista, SP",
+  eyebrow: "Quem está por trás do código",
+  headline: "Transformo ideias em software que economiza o seu tempo.",
+  short:
+    "Sou o Pedro, fundador da FerrazCode. Programo do banco de dados ao último pixel — e automatizo tudo que for repetitivo pra você focar no que importa.",
+  /** Parágrafos da história (página /fundador). */
+  story: [
+    "Tudo começou com curiosidade. Eu queria entender como os sistemas que a gente usa todo dia funcionam por dentro — e quando descobri que dava pra construir os meus, virou paixão. Hoje é o que eu faço: pego uma ideia da cabeça de alguém e transformo em um sistema que funciona de verdade.",
+    "Trabalho como desenvolvedor fullstack. Na prática, isso quer dizer que cuido do que o cliente vê (a interface bonita, rápida e fácil de usar) e do que ninguém vê (o servidor, o banco de dados e a segurança). É o pacote completo, feito por uma pessoa só que se importa com cada detalhe.",
+    "Minha obsessão é automação. Se uma tarefa é repetitiva, ela não deveria roubar o seu tempo. Eu desenho sistemas que fazem o trabalho chato no automático — relatórios, planilhas, mensagens, integrações — pra você focar no que realmente importa: o seu negócio.",
+    "A FerrazCode é o meu jeito de levar software de qualidade pra quem normalmente não teria acesso a isso. Sem template genérico, sem promessa vazia. Só código limpo, seguro e feito sob medida pra você.",
+  ],
+  signature: "É só me chamar. A primeira conversa é por minha conta.",
+};
+
+export type StackGroup = {
+  icon: string;
+  title: string;
+  items: string[];
+};
+
+/** Stack fullstack do Pedro (página /fundador). */
+export const founderStack: StackGroup[] = [
+  {
+    icon: "Palette",
+    title: "Front-end",
+    items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Animações & UI"],
+  },
+  {
+    icon: "Server",
+    title: "Back-end",
+    items: ["Node.js", "APIs & rotas", "Autenticação segura", "Regras de negócio"],
+  },
+  {
+    icon: "Database",
+    title: "Banco & Infra",
+    items: ["PostgreSQL", "Modelagem de dados", "Deploy & hospedagem", "Backups"],
+  },
+  {
+    icon: "Workflow",
+    title: "Automação & Bots",
+    items: ["Bots de WhatsApp & Telegram", "Integrações entre sistemas", "Rotinas automáticas", "Apps desktop (.exe)"],
+  },
+];
+
+export type FounderValue = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+/** Princípios de trabalho do Pedro (página /fundador). */
+export const founderValues: FounderValue[] = [
+  {
+    icon: "Clock",
+    title: "Seu tempo é sagrado",
+    description:
+      "Automatizo o que for repetitivo. Se o computador pode fazer, você não deveria estar fazendo na mão.",
+  },
+  {
+    icon: "ShieldCheck",
+    title: "Segurança em primeiro lugar",
+    description:
+      "Trato os dados do seu negócio como se fossem meus: criptografados, validados e protegidos contra invasão.",
+  },
+  {
+    icon: "Heart",
+    title: "Feito com cuidado",
+    description:
+      "Nada de copiar e colar template. Cada projeto é pensado, desenhado e ajustado até ficar do seu jeito.",
+  },
+  {
+    icon: "MessageSquare",
+    title: "Conversa de gente",
+    description:
+      "Você fala comigo direto, sem termo técnico complicado e sem fila de atendimento. Simples assim.",
+  },
+];

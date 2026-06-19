@@ -231,6 +231,93 @@ summary::-webkit-details-marker {
 .animate-marquee {
   animation: marquee 28s linear infinite;
 }
+.animate-marquee-reverse {
+  animation: marquee 34s linear infinite reverse;
+}
+
+/* ---- Novas animações (super atualização) ---- */
+
+/* Giro lento — anel de gradiente em volta do avatar do fundador */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+.animate-spin-slow-reverse {
+  animation: spin-slow 26s linear infinite reverse;
+}
+
+/* Cursor piscando do bloco de código */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.animate-blink {
+  animation: blink 1.05s step-end infinite;
+}
+
+/* Pulso de brilho neon (cartões em destaque) */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.25), 0 0 30px -6px rgba(124, 58, 237, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.35), 0 0 60px -4px rgba(124, 58, 237, 0.6);
+  }
+}
+.animate-glow-pulse {
+  animation: glow-pulse 4.5s ease-in-out infinite;
+}
+
+/* Varredura de luz (passa um brilho por cima — botões e cartões) */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-130%);
+  }
+  60%,
+  100% {
+    transform: translateX(130%);
+  }
+}
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 70%
+  );
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+.shine:hover::after {
+  animation: shimmer 1.1s ease;
+}
+
+/* Texto que "digita" via clip (não usado em prod, mas disponível) */
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
 
 /* Respeita quem prefere menos movimento */
 @media (prefers-reduced-motion: reduce) {

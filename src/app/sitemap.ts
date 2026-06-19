@@ -13,6 +13,7 @@ const paths = [
   "/preview/agendamentos",
   "/preview/desktop",
   "/planos",
+  "/fundador",
   "/sobre",
   "/contato",
 ];

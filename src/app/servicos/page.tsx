@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { site } from "@/lib/site";
 import { PageHero } from "@/components/PageHero";
 import { Services } from "@/components/Services";
+import { Automation } from "@/components/Automation";
 import { Process } from "@/components/Process";
 import { CTA } from "@/components/CTA";
 
@@ -23,6 +24,7 @@ export default function ServicosPage() {
         subtitle="Do estacionamento ao restaurante, do estoque ao app desktop — construímos a ferramenta certa para você."
       />
       <Services showHeading={false} />
+      <Automation />
       <Process />
       <CTA />
     </>
