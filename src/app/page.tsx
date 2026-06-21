@@ -1,6 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { Stats } from "@/components/Stats";
-import { Marquee } from "@/components/Marquee";
+import { TechStack } from "@/components/TechStack";
 import { Services } from "@/components/Services";
 import { Automation } from "@/components/Automation";
 import { Differentiators } from "@/components/Differentiators";
@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <Hero />
       <Stats />
-      <Marquee />
+      <TechStack />
       <Services />
       <Automation />
       <Differentiators />

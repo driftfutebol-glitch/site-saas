@@ -10,9 +10,11 @@ import {
   Layers,
   MessageSquare,
   Palette,
+  Play,
   Server,
   ShieldCheck,
   Sparkles,
+  User,
   UtensilsCrossed,
   Workflow,
   Zap,
@@ -38,6 +40,8 @@ const icons: Record<string, LucideIcon> = {
   Database,
   Clock,
   Heart,
+  Play,
+  User,
 };
 
 type IconProps = {

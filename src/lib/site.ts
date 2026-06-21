@@ -155,14 +155,41 @@ export const stats = [
   { value: "0", label: "Brechas conhecidas" },
 ];
 
-/** Links do menu de navegação (usados na Navbar e no Rodapé). */
+/** Links principais do menu de navegação (Navbar). */
 export const navLinks = [
   { href: "/", label: "Início" },
   { href: "/servicos", label: "Serviços" },
-  { href: "/preview", label: "Demos" },
   { href: "/planos", label: "Planos" },
-  { href: "/fundador", label: "Fundador" },
+  { href: "/sobre", label: "Sobre" },
   { href: "/contato", label: "Contato" },
+];
+
+/** Itens do menu suspenso "Soluções" (Navbar). */
+export const solutionsMenu = [
+  {
+    href: "/preview",
+    label: "Demonstrações ao vivo",
+    desc: "Veja os sistemas funcionando de verdade",
+    icon: "Play",
+  },
+  {
+    href: "/servicos#automacao",
+    label: "Automação de processos",
+    desc: "Economize horas toda semana",
+    icon: "Workflow",
+  },
+  {
+    href: "/servicos",
+    label: "Sistemas sob medida",
+    desc: "Estacionamento, restaurante, estoque e mais",
+    icon: "Sparkles",
+  },
+  {
+    href: "/fundador",
+    label: "Conheça o fundador",
+    desc: "Quem vai desenvolver o seu projeto",
+    icon: "User",
+  },
 ];
 
 export type Plan = {

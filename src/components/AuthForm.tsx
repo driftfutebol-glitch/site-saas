@@ -3,10 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion, type Variants } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { loginSchema, signupSchema } from "@/lib/auth-schema";
+import { EASE } from "@/lib/motion";
 
 type Mode = "login" | "signup";
+
+const container: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+};
+const item: Variants = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE } },
+};
 
 export function AuthForm({ mode, initialError = "" }: { mode: Mode; initialError?: string }) {
   const router = useRouter();
@@ -62,36 +73,42 @@ export function AuthForm({ mode, initialError = "" }: { mode: Mode; initialError
   const fieldError = (name: string) => errors[name]?.[0];
 
   return (
-    <div className="mx-auto max-w-md px-5 pb-24">
-      <div className="glass border-gradient rounded-2xl p-6 md:p-8">
-        {generalError && (
-          <p className="mb-5 rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-300">
-            {generalError}
-          </p>
-        )}
-
-        {/* Google */}
-        <a
-          href="/api/auth/google"
-          className="flex w-full items-center justify-center gap-3 rounded-full border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white transition-colors hover:bg-white/10"
+    <motion.div variants={container} initial="hidden" animate="visible" className="w-full">
+      {generalError && (
+        <motion.p
+          variants={item}
+          className="mb-5 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300"
         >
-          <GoogleIcon />
-          Continuar com Google
-        </a>
+          {generalError}
+        </motion.p>
+      )}
 
-        <div className="my-6 flex items-center gap-4 text-xs text-muted">
-          <span className="h-px flex-1 bg-white/10" />
-          ou com e-mail
-          <span className="h-px flex-1 bg-white/10" />
-        </div>
+      {/* Google */}
+      <motion.a
+        variants={item}
+        href="/api/auth/google"
+        className="shine flex w-full items-center justify-center gap-3 rounded-full border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white transition-colors hover:bg-white/10"
+      >
+        <GoogleIcon />
+        Continuar com Google
+      </motion.a>
 
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          {isSignup && (
+      <motion.div variants={item} className="my-6 flex items-center gap-4 text-xs text-muted">
+        <span className="h-px flex-1 bg-white/10" />
+        ou com e-mail
+        <span className="h-px flex-1 bg-white/10" />
+      </motion.div>
+
+      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        {isSignup && (
+          <motion.div variants={item}>
             <Field label="Nome" error={fieldError("name")}>
               <input name="name" placeholder="Seu nome" className="input" autoComplete="name" />
             </Field>
-          )}
+          </motion.div>
+        )}
 
+        <motion.div variants={item}>
           <Field label="E-mail" error={fieldError("email")}>
             <input
               name="email"
@@ -101,7 +118,9 @@ export function AuthForm({ mode, initialError = "" }: { mode: Mode; initialError
               autoComplete="email"
             />
           </Field>
+        </motion.div>
 
+        <motion.div variants={item}>
           <Field label="Senha" error={fieldError("password")}>
             <input
               name="password"
@@ -111,44 +130,45 @@ export function AuthForm({ mode, initialError = "" }: { mode: Mode; initialError
               autoComplete={isSignup ? "new-password" : "current-password"}
             />
           </Field>
+        </motion.div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="glow-brand inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-brand px-6 py-3.5 font-semibold text-white transition-transform hover:scale-[1.02] disabled:opacity-60"
-          >
-            {loading ? (
-              <>
-                <Loader2 size={18} className="animate-spin" />
-                {isSignup ? "Criando conta..." : "Entrando..."}
-              </>
-            ) : isSignup ? (
-              "Criar minha conta"
-            ) : (
-              "Entrar"
-            )}
-          </button>
-        </form>
-
-        <p className="mt-6 text-center text-sm text-muted">
-          {isSignup ? (
+        <motion.button
+          variants={item}
+          type="submit"
+          disabled={loading}
+          className="shine glow-brand inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-brand px-6 py-3.5 font-semibold text-white transition-transform hover:scale-[1.02] disabled:opacity-60"
+        >
+          {loading ? (
             <>
-              Já tem conta?{" "}
-              <Link href="/login" className="font-semibold text-brand hover:underline">
-                Entrar
-              </Link>
+              <Loader2 size={18} className="animate-spin" />
+              {isSignup ? "Criando conta..." : "Entrando..."}
             </>
+          ) : isSignup ? (
+            "Criar minha conta"
           ) : (
-            <>
-              Ainda não tem conta?{" "}
-              <Link href="/registrar" className="font-semibold text-brand hover:underline">
-                Criar conta grátis
-              </Link>
-            </>
+            "Entrar"
           )}
-        </p>
-      </div>
-    </div>
+        </motion.button>
+      </form>
+
+      <motion.p variants={item} className="mt-6 text-center text-sm text-muted">
+        {isSignup ? (
+          <>
+            Já tem conta?{" "}
+            <Link href="/login" className="font-semibold text-brand hover:underline">
+              Entrar
+            </Link>
+          </>
+        ) : (
+          <>
+            Ainda não tem conta?{" "}
+            <Link href="/registrar" className="font-semibold text-brand hover:underline">
+              Criar conta grátis
+            </Link>
+          </>
+        )}
+      </motion.p>
+    </motion.div>
   );
 }
 

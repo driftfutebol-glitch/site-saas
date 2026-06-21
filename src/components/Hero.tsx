@@ -2,10 +2,10 @@
 
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { site } from "@/lib/site";
+import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { EASE } from "@/lib/motion";
 import { Magnetic } from "@/components/ui/Magnetic";
+import { DashboardMockup } from "@/components/ui/DashboardMockup";
 
 const container: Variants = {
   hidden: {},
@@ -18,107 +18,73 @@ const item: Variants = {
 
 export function Hero() {
   return (
-    <section id="topo" className="relative px-5 pt-36 pb-20 md:pt-44 md:pb-28">
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="visible"
-        className="mx-auto max-w-4xl text-center"
-      >
-        <motion.div variants={item} className="flex justify-center">
-          <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted">
-            <Sparkles size={15} className="text-cyan" />
-            Desenvolvimento fullstack • sistemas & automações
-          </span>
-        </motion.div>
-
-        <motion.h1
-          variants={item}
-          className="mt-7 text-balance text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl"
-        >
-          Sua ideia vira{" "}
-          <span className="text-gradient">software que economiza seu tempo</span>
-        </motion.h1>
-
-        <motion.p
-          variants={item}
-          className="mx-auto mt-6 max-w-2xl text-balance text-lg text-muted md:text-xl"
-        >
-          Sistemas de gestão, sites, apps desktop e{" "}
-          <span className="text-white">automações</span> feitos do zero — do banco de dados
-          ao último pixel, rápidos, bonitos e <span className="text-white">seguros</span>.
-        </motion.p>
-
+    <section id="topo" className="relative px-5 pt-32 pb-16 md:pt-40 md:pb-24">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1fr_1.05fr]">
+        {/* Texto */}
         <motion.div
-          variants={item}
-          className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="text-center lg:text-left"
         >
-          <Magnetic>
-            <Link
-              href="/contato"
-              className="group glow-brand inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-brand px-7 py-3.5 font-semibold text-white transition-transform hover:scale-105"
-            >
-              Começar meu projeto
-              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Magnetic>
-          <Link
-            href="/servicos"
-            className="glass inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition-colors hover:bg-white/10"
+          <motion.div variants={item} className="flex justify-center lg:justify-start">
+            <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted">
+              <Sparkles size={15} className="text-cyan" />
+              Desenvolvimento fullstack • Sistemas & Automação
+            </span>
+          </motion.div>
+
+          <motion.h1
+            variants={item}
+            className="mt-6 text-balance text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl"
           >
-            Ver soluções
-          </Link>
+            Sua ideia vira{" "}
+            <span className="text-gradient">software que economiza seu tempo</span>
+          </motion.h1>
+
+          <motion.p
+            variants={item}
+            className="mx-auto mt-6 max-w-xl text-balance text-lg text-muted lg:mx-0"
+          >
+            Sistemas de gestão, sites, apps desktop e{" "}
+            <span className="text-white">automações</span> feitos do zero — do banco de dados
+            ao último pixel, rápidos, bonitos e <span className="text-white">seguros</span>.
+          </motion.p>
+
+          <motion.div
+            variants={item}
+            className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start"
+          >
+            <Magnetic>
+              <Link
+                href="/contato"
+                className="group shine glow-brand inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-brand px-7 py-3.5 font-semibold text-white transition-transform hover:scale-105"
+              >
+                Começar meu projeto
+                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Magnetic>
+            <Link
+              href="/preview"
+              className="glass group inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              <Play size={16} className="text-cyan transition-transform group-hover:scale-110" />
+              Ver demonstração
+            </Link>
+          </motion.div>
+
+          <motion.p variants={item} className="mt-5 text-sm text-muted">
+            Teste grátis de até 15 dias · sem compromisso ·{" "}
+            <Link href="/fundador" className="text-cyan underline-offset-4 hover:underline">
+              conheça o fundador
+            </Link>
+          </motion.p>
         </motion.div>
 
-        <motion.p variants={item} className="mt-5 text-sm text-muted">
-          Teste grátis de até 15 dias · sem compromisso ·{" "}
-          <Link href="/fundador" className="text-cyan underline-offset-4 hover:underline">
-            conheça o fundador
-          </Link>
-        </motion.p>
-      </motion.div>
-
-      {/* Mockup de janela de código (flutua suavemente) */}
-      <div className="animate-float-gentle mx-auto mt-16 max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: 60, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: EASE }}
-          className="border-gradient glow-brand overflow-hidden rounded-2xl"
-        >
-          <div className="glass">
-          <div className="flex items-center gap-2 border-b border-white/5 px-4 py-3">
-            <span className="h-3 w-3 rounded-full bg-red-400/80" />
-            <span className="h-3 w-3 rounded-full bg-yellow-400/80" />
-            <span className="h-3 w-3 rounded-full bg-green-400/80" />
-            <span className="ml-3 font-mono text-xs text-muted">seuNegocio.ts — {site.name}</span>
-          </div>
-          <pre className="overflow-x-auto p-5 text-left font-mono text-[13px] leading-relaxed">
-            <code>
-              <span className="text-fuchsia">const</span>{" "}
-              <span className="text-cyan">seuNegocio</span> = {"{"}
-              {"\n"}
-              {"  "}seguro<span className="text-muted">:</span>{" "}
-              <span className="text-green-300">true</span>,
-              {"\n"}
-              {"  "}rapido<span className="text-muted">:</span>{" "}
-              <span className="text-green-300">true</span>,
-              {"\n"}
-              {"  "}automatizado<span className="text-muted">:</span>{" "}
-              <span className="text-green-300">true</span>,
-              {"\n"}
-              {"  "}feitoPor<span className="text-muted">:</span>{" "}
-              <span className="text-yellow-200">&quot;Pedro Ferraz&quot;</span>,
-              {"\n"}
-              {"}"};
-              {"\n\n"}
-              <span className="text-fuchsia">export default</span>{" "}
-              <span className="text-cyan">seuNegocio</span>;
-              <span className="animate-blink ml-0.5 inline-block w-2 border-l-2 border-cyan align-middle">&nbsp;</span>
-            </code>
-          </pre>
-          </div>
-        </motion.div>
+        {/* Dashboard (flutua suavemente) */}
+        <div className="animate-float-gentle">
+          <DashboardMockup />
+        </div>
       </div>
     </section>
   );

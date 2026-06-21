@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
-import { PageHero } from "@/components/PageHero";
-import { AuthForm } from "@/components/AuthForm";
+import { AuthShell } from "@/components/AuthShell";
 
 export const metadata: Metadata = {
   title: `Entrar — ${site.name}`,
@@ -26,17 +25,22 @@ export default async function LoginPage({
   const initialError = erroCode ? erroMessages[erroCode] ?? "" : "";
 
   return (
-    <>
-      <PageHero
-        eyebrow="Bem-vindo de volta"
-        title={
-          <>
-            Entrar na <span className="text-gradient">sua conta</span>
-          </>
-        }
-        subtitle="Acesse seu painel para acompanhar seus projetos."
-      />
-      <AuthForm mode="login" initialError={initialError} />
-    </>
+    <AuthShell
+      mode="login"
+      eyebrow="Bem-vindo de volta"
+      headline="Acesse o seu painel de controle"
+      benefits={[
+        "Acompanhe seus projetos em tempo real",
+        "Veja relatórios e dashboards",
+        "Fale direto com quem desenvolve",
+      ]}
+      title={
+        <>
+          Entrar na <span className="text-gradient">sua conta</span>
+        </>
+      }
+      subtitle="Que bom te ver de novo. Continue de onde parou."
+      initialError={initialError}
+    />
   );
 }
