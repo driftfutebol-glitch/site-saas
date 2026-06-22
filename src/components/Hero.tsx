@@ -82,8 +82,13 @@ export function Hero() {
         </motion.div>
 
         {/* Dashboard (flutua suavemente) */}
-        <div className="animate-float-gentle">
-          <DashboardMockup />
+        <div>
+          <div className="animate-float-gentle">
+            <DashboardMockup />
+          </div>
+          <p className="mt-3 text-center text-xs text-muted/70">
+            Demonstração com dados fictícios
+          </p>
         </div>
       </div>
     </section>

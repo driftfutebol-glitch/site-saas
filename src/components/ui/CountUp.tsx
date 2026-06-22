@@ -12,25 +12,46 @@ export function CountUp({ value, duration = 1.6 }: { value: string; duration?: n
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const parts = value.match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/);
   const [display, setDisplay] = useState(parts ? `${parts[1]}0${parts[3]}` : value);
+  const doneRef = useRef(false);
 
   useEffect(() => {
-    if (!parts || !inView) return;
+    if (!parts) return;
     const prefix = parts[1];
     const target = parseFloat(parts[2]);
     const suffix = parts[3];
     const decimals = (parts[2].split(".")[1] ?? "").length;
+    const final = `${prefix}${target.toFixed(decimals)}${suffix}`;
+
+    // Já animou? Garante o valor final.
+    if (doneRef.current) {
+      setDisplay(final);
+      return;
+    }
+    // Trava de segurança: o valor real SEMPRE aparece, mesmo se a animação não rodar.
+    const deadline = setTimeout(() => {
+      doneRef.current = true;
+      setDisplay(final);
+    }, duration * 1000 + 400);
 
     let raf = 0;
     let startTime = 0;
     const step = (now: number) => {
+      if (doneRef.current) return;
       if (!startTime) startTime = now;
       const t = Math.min((now - startTime) / (duration * 1000), 1);
       const eased = 1 - Math.pow(1 - t, 3); // ease-out
       setDisplay(`${prefix}${(target * eased).toFixed(decimals)}${suffix}`);
       if (t < 1) raf = requestAnimationFrame(step);
+      else {
+        doneRef.current = true;
+        clearTimeout(deadline);
+      }
     };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    if (inView) raf = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(deadline);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, value]);
 

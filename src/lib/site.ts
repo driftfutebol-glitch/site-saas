@@ -150,9 +150,9 @@ export const steps: Step[] = [
 
 export const stats = [
   { value: "100%", label: "Código sob medida" },
-  { value: "+10h", label: "Economizadas por semana" },
-  { value: "24/7", label: "Sistemas no ar" },
-  { value: "0", label: "Brechas conhecidas" },
+  { value: "+40h", label: "Economizadas por semana" },
+  { value: "7", label: "Sistemas demonstráveis" },
+  { value: "A+", label: "Foco em segurança" },
 ];
 
 /** Links principais do menu de navegação (Navbar). */
@@ -238,7 +238,7 @@ export const plans: Plan[] = [
       "Bots p/ WhatsApp, Telegram e Discord",
       "Login seguro + níveis de acesso",
       "Relatórios e dashboards",
-      "Suporte 24 horas",
+      "Suporte prioritário no WhatsApp",
     ],
     cta: "Quero esse",
   },
@@ -254,7 +254,7 @@ export const plans: Plan[] = [
       "Vários sistemas integrados",
       "App desktop (.exe) incluso",
       "Atualizações semanais prioritárias",
-      "Suporte 24h dedicado",
+      "Suporte prioritário + urgências combinadas",
     ],
     cta: "Falar com especialista",
   },
@@ -273,7 +273,7 @@ export const faq: FaqItem[] = [
   },
   {
     q: "Vocês dão suporte depois de entregar?",
-    a: "Sim, e de verdade. A mensalidade inclui atendimento (24 horas nos planos maiores) e atualizações toda semana para manter o seu sistema sempre no ar, seguro e melhorando.",
+    a: "Sim, e de verdade. A mensalidade inclui suporte prioritário pelo WhatsApp (com urgências combinadas nos planos maiores) e atualizações toda semana para manter o seu sistema sempre no ar, seguro e melhorando.",
   },
   {
     q: "Meus dados ficam seguros?",
@@ -300,9 +300,9 @@ export const about = {
 export const trial = {
   days: 15,
   eyebrow: "Teste grátis",
-  title: "Experimente 15 dias. Por nossa conta.",
+  title: "Experimente antes de fechar.",
   subtitle:
-    "A gente prepara o seu projeto com a sua ideia e entrega para você usar de verdade por até 15 dias, sem pagar nada. Gostou? Aí a gente negocia a melhor condição pra você.",
+    "Teste grátis de até 15 dias para demonstrações, protótipos ou a versão inicial do seu projeto. Sistemas completos sob medida são liberados após a aprovação do orçamento e do contrato — assim ninguém sai no prejuízo.",
   steps: [
     { title: "Conte sua ideia", description: "Você explica o que precisa. Sem compromisso." },
     { title: "A gente desenvolve", description: "Preparamos o seu projeto sob medida, do seu jeito." },
@@ -323,6 +323,8 @@ export const founder = {
   location: "Baixada Santista, SP",
   eyebrow: "Quem está por trás do código",
   headline: "Transformo ideias em software que economiza o seu tempo.",
+  lead:
+    "Conheça quem vai tirar a sua ideia do papel e transformar em sistema de verdade.",
   short:
     "Sou o Pedro, fundador da FerrazCode. Programo do banco de dados ao último pixel — e automatizo tudo que for repetitivo pra você focar no que importa.",
   /** Parágrafos da história (página /fundador). */

@@ -50,7 +50,13 @@ export function FounderHero() {
             </span>
           </motion.div>
 
-          <motion.p variants={item} className="mt-6 max-w-xl text-balance text-lg text-muted">
+          <motion.p
+            variants={item}
+            className="mt-6 max-w-xl text-balance text-xl font-medium leading-snug text-foreground"
+          >
+            {founder.lead}
+          </motion.p>
+          <motion.p variants={item} className="mt-3 max-w-xl text-balance text-muted">
             {founder.short}
           </motion.p>
 

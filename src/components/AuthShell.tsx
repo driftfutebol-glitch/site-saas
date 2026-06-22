@@ -82,18 +82,16 @@ export function AuthShell({
         transition={{ type: "spring", stiffness: 80, damping: 10, mass: 0.9 }}
         className="border-gradient glow-brand relative mx-auto grid max-w-5xl overflow-hidden rounded-3xl lg:grid-cols-2"
       >
-        {/* Alça de "puxar" o card */}
+        {/* Alça de "puxar" o card (arraste e ele volta sozinho) */}
         <button
           type="button"
           onPointerDown={(e) => dragControls.start(e)}
           style={{ touchAction: "none" }}
           aria-label="Arraste o card"
-          className="cursor-grab group absolute left-1/2 top-2.5 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-muted backdrop-blur transition-colors hover:bg-white/10 hover:text-white"
+          title="Arraste"
+          className="cursor-grab absolute left-1/2 top-2 z-20 flex h-6 w-12 -translate-x-1/2 items-center justify-center rounded-full text-muted/50 transition-colors hover:text-muted"
         >
-          <GripHorizontal size={14} />
-          <span className="max-w-0 overflow-hidden text-[11px] font-medium opacity-0 transition-all duration-300 group-hover:max-w-[80px] group-hover:opacity-100">
-            puxa aqui
-          </span>
+          <GripHorizontal size={16} />
         </button>
 
         {/* Showcase */}

@@ -35,20 +35,37 @@ function AnimatedNumber({
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-30px" });
   const [n, setN] = useState(0);
+  const doneRef = useRef(false);
 
   useEffect(() => {
-    if (!inView) return;
+    if (doneRef.current) {
+      setN(value);
+      return;
+    }
+    // Trava de segurança: o número real SEMPRE aparece, mesmo se a animação não rodar.
+    const deadline = setTimeout(() => {
+      doneRef.current = true;
+      setN(value);
+    }, duration + 400);
     let raf = 0;
     let start = 0;
     const step = (t: number) => {
+      if (doneRef.current) return;
       if (!start) start = t;
       const p = Math.min((t - start) / duration, 1);
       const eased = 1 - Math.pow(1 - p, 3);
       setN(value * eased);
       if (p < 1) raf = requestAnimationFrame(step);
+      else {
+        doneRef.current = true;
+        clearTimeout(deadline);
+      }
     };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    if (inView) raf = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(deadline);
+    };
   }, [inView, value, duration]);
 
   const formatted = n.toLocaleString("pt-BR", {
@@ -79,14 +96,14 @@ const navIcons = [
 const kpis = [
   {
     label: "Receita Total",
-    value: 45231.89,
+    value: 24850,
     decimals: 2,
     prefix: "R$ ",
     delta: "12.5%",
     featured: true,
   },
-  { label: "Vendas", value: 1231, decimals: 0, prefix: "", delta: "8.2%", featured: false },
-  { label: "Clientes", value: 892, decimals: 0, prefix: "", delta: "15.3%", featured: false },
+  { label: "Vendas", value: 184, decimals: 0, prefix: "", delta: "8.2%", featured: false },
+  { label: "Clientes", value: 73, decimals: 0, prefix: "", delta: "15.3%", featured: false },
 ];
 
 // gráfico de linha (Jan–Jun)

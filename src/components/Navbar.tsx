@@ -115,7 +115,7 @@ export function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          {user ? (
+          {user && (
             <>
               {user.isAdmin && (
                 <Link
@@ -136,13 +136,6 @@ export function Navbar() {
                 Minha conta
               </Link>
             </>
-          ) : (
-            <Link
-              href="/login"
-              className="text-sm text-muted transition-colors hover:text-white"
-            >
-              Entrar
-            </Link>
           )}
           <Link
             href="/contato"
@@ -207,7 +200,7 @@ export function Navbar() {
                 </Link>
               ))}
 
-            {user ? (
+            {user && (
               <>
                 {user.isAdmin && (
                   <Link
@@ -224,13 +217,6 @@ export function Navbar() {
                   Minha conta
                 </Link>
               </>
-            ) : (
-              <Link
-                href="/login"
-                className="rounded-lg px-3 py-3 text-muted transition-colors hover:bg-white/5 hover:text-white"
-              >
-                Entrar
-              </Link>
             )}
             <Link
               href="/contato"

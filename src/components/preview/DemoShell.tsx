@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, Bell, Search, CircleUser } from "lucide-react";
+import { ArrowLeft, Bell, Search, CircleUser, Sparkles } from "lucide-react";
 import { Appear } from "./widgets";
 
 export type Accent = "cyan" | "amber" | "emerald" | "violet" | "rose" | "blue";
@@ -104,6 +104,16 @@ export function DemoShell({ system, tagline, accent, nav, children }: Props) {
           </main>
         </div>
       </div>
+
+      {/* CTA fixo — "quero um igual" */}
+      <Link
+        href="/contato"
+        className={`group fixed bottom-5 right-5 z-30 inline-flex items-center gap-2 rounded-full bg-gradient-to-r ${a.grad} px-5 py-3 text-sm font-semibold text-white shadow-2xl shadow-black/40 transition-transform hover:scale-105`}
+      >
+        <Sparkles size={16} className="transition-transform group-hover:rotate-12" />
+        <span className="hidden sm:inline">Quero um igual para meu negócio</span>
+        <span className="sm:hidden">Quero um igual</span>
+      </Link>
 
       {/* Faixa "isto é uma demo" */}
       <div className="border-t border-white/10 bg-[#0d0e18] px-6 py-3 text-center text-xs text-white/35">

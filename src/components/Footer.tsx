@@ -91,17 +91,31 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-2 border-t border-white/5 pt-6 text-sm text-muted md:flex-row">
-          <p>
-            © {new Date().getFullYear()} {site.name}. Todos os direitos reservados.
-          </p>
-          <p>
-            Desenvolvido por{" "}
-            <Link href="/fundador" className="text-foreground/90 transition-colors hover:text-white">
-              Pedro Ferraz
+        <div className="mt-10 border-t border-white/5 pt-6">
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+            <Link href="/privacidade" className="text-muted transition-colors hover:text-white">
+              Política de Privacidade
             </Link>
-            .
-          </p>
+            <span className="text-muted/30">·</span>
+            <Link href="/termos" className="text-muted transition-colors hover:text-white">
+              Termos de Uso
+            </Link>
+          </nav>
+          <div className="mt-5 flex flex-col items-center justify-between gap-2 text-sm text-muted md:flex-row">
+            <p>
+              © {new Date().getFullYear()} {site.name}. Todos os direitos reservados.
+            </p>
+            <p>
+              Desenvolvido por{" "}
+              <Link
+                href="/fundador"
+                className="text-foreground/90 transition-colors hover:text-white"
+              >
+                Pedro Ferraz
+              </Link>
+              .
+            </p>
+          </div>
         </div>
       </div>
     </footer>

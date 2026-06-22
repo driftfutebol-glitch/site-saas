@@ -45,22 +45,42 @@ export function StatCard({
   const inView = useInView(ref, { once: true });
   const match = value.match(/^(\d+)(.*)$/); // só anima quando começa por número inteiro
   const [display, setDisplay] = useState(match ? `0${match[2]}` : value);
+  const doneRef = useRef(false);
 
   useEffect(() => {
-    if (!match || !inView) return;
+    if (!match) return;
     const target = parseInt(match[1], 10);
     const suffix = match[2];
+    const final = `${target}${suffix}`;
+    // Já animou antes? Garante o valor final e sai.
+    if (doneRef.current) {
+      setDisplay(final);
+      return;
+    }
+    // Trava de segurança: mostra o valor real mesmo se a animação não rodar.
+    const deadline = setTimeout(() => {
+      doneRef.current = true;
+      setDisplay(final);
+    }, 1600);
     let raf = 0;
     let start = 0;
     const step = (t: number) => {
+      if (doneRef.current) return;
       if (!start) start = t;
       const p = Math.min((t - start) / 1100, 1);
       const eased = 1 - Math.pow(1 - p, 3);
       setDisplay(`${Math.round(target * eased)}${suffix}`);
       if (p < 1) raf = requestAnimationFrame(step);
+      else {
+        doneRef.current = true;
+        clearTimeout(deadline);
+      }
     };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    if (inView) raf = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(deadline);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, value]);
 

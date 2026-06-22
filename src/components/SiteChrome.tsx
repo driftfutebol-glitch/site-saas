@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Background } from "@/components/ui/Background";
 import { CursorGlow } from "@/components/ui/CursorGlow";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { Navbar } from "@/components/Navbar";
 
 /**
@@ -20,6 +21,7 @@ export function SiteChrome() {
       <CursorGlow />
       <ScrollProgress />
       <Navbar />
+      <FloatingWhatsApp />
     </>
   );
 }

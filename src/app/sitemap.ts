@@ -16,6 +16,8 @@ const paths = [
   "/fundador",
   "/sobre",
   "/contato",
+  "/privacidade",
+  "/termos",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

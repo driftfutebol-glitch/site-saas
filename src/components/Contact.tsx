@@ -19,6 +19,8 @@ export function Contact({ showHeading = true }: { showHeading?: boolean }) {
     setMessage("");
 
     const form = new FormData(e.currentTarget);
+    const budget = String(form.get("budget") ?? "");
+    const deadline = String(form.get("deadline") ?? "");
     const payload = {
       name: String(form.get("name") ?? ""),
       email: String(form.get("email") ?? ""),
@@ -36,12 +38,22 @@ export function Contact({ showHeading = true }: { showHeading?: boolean }) {
       return;
     }
 
+    // Embute orçamento e prazo na mensagem enviada (ajuda a qualificar o lead).
+    const extras = [
+      budget ? `Orçamento: ${budget}` : null,
+      deadline ? `Prazo: ${deadline}` : null,
+    ].filter(Boolean);
+    const sendPayload = {
+      ...payload,
+      message: extras.length ? `${extras.join(" · ")}\n\n${payload.message}` : payload.message,
+    };
+
     setStatus("loading");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(sendPayload),
       });
       const json = await res.json();
       if (!res.ok || !json.ok) {
@@ -136,6 +148,27 @@ export function Contact({ showHeading = true }: { showHeading?: boolean }) {
                         </option>
                       ))}
                       <option value="Outro">Outro</option>
+                    </select>
+                  </Field>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Orçamento disponível">
+                    <select name="budget" defaultValue="" className="input">
+                      <option value="">Selecione...</option>
+                      <option value="R$ 500 a R$ 1.000">R$ 500 a R$ 1.000</option>
+                      <option value="R$ 1.000 a R$ 3.000">R$ 1.000 a R$ 3.000</option>
+                      <option value="R$ 3.000+">R$ 3.000+</option>
+                      <option value="Ainda não sei">Ainda não sei</option>
+                    </select>
+                  </Field>
+                  <Field label="Prazo desejado">
+                    <select name="deadline" defaultValue="" className="input">
+                      <option value="">Selecione...</option>
+                      <option value="Urgente">Urgente</option>
+                      <option value="Até 15 dias">Até 15 dias</option>
+                      <option value="Até 30 dias">Até 30 dias</option>
+                      <option value="Sem pressa">Sem pressa</option>
                     </select>
                   </Field>
                 </div>
