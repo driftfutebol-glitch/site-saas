@@ -8,6 +8,24 @@ export function Background() {
       {/* grade */}
       <div className="grid-bg absolute inset-0" />
 
+      {/* aurora — faixas de luz que vagam devagar (profundidade premium) */}
+      <div className="absolute inset-0 overflow-hidden opacity-70">
+        <div
+          className="animate-aurora absolute -top-1/3 left-1/4 h-[55rem] w-[55rem] rounded-full blur-3xl"
+          style={{
+            background:
+              "conic-gradient(from 90deg at 50% 50%, rgba(124,58,237,0.22), rgba(34,211,238,0.16), rgba(232,121,249,0.18), rgba(124,58,237,0.22))",
+          }}
+        />
+        <div
+          className="animate-aurora-2 absolute top-1/4 -right-1/4 h-[48rem] w-[48rem] rounded-full blur-3xl"
+          style={{
+            background:
+              "conic-gradient(from 210deg at 50% 50%, rgba(34,211,238,0.18), rgba(124,58,237,0.2), transparent 70%)",
+          }}
+        />
+      </div>
+
       {/* orbes de luz */}
       <div className="animate-float-slow absolute -top-32 -left-24 h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle,rgba(124,58,237,0.45),transparent_60%)] blur-3xl" />
       <div className="animate-float-slow-2 absolute top-1/3 -right-32 h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.30),transparent_60%)] blur-3xl" />

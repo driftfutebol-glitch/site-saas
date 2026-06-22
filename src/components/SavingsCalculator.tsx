@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight, Clock, PiggyBank, CalendarDays, Calculator } from "lucide-react";
+import { Clock, PiggyBank, CalendarDays, Calculator, MessageCircle } from "lucide-react";
 import { EASE } from "@/lib/motion";
+import { site } from "@/lib/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 /** Anima um número de um valor para outro toda vez que o alvo muda. */
@@ -65,6 +65,22 @@ export function SavingsCalculator() {
   if (savedMoneyYear >= 40000) message = "Isso muda o patamar do seu negócio. 🚀";
   else if (savedMoneyYear >= 12000) message = "Isso é quase um funcionário a mais — de graça.";
   else if (savedMoneyYear >= 4000) message = "Dá pra reinvestir no seu negócio o ano todo.";
+
+  // Abre o WhatsApp já com o resultado do teste preenchido.
+  const waText = `Olá! Fiz o teste de economia no site da ${site.name} 👋
+
+Minha rotina hoje:
+• ${hours}h por semana em tarefas repetitivas
+• ${people} pessoa(s) nesse trabalho
+• Custo médio de R$${cost}/hora
+
+Resultado estimado com automação:
+• ${savedHoursMonth}h livres por mês
+• ${brl(savedMoneyMonth)} por mês
+• ${brl(savedMoneyYear)} por ano
+
+Quero economizar esse tempo. Bora conversar?`;
+  const waHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(waText)}`;
 
   return (
     <section id="calculadora" className="px-5 py-16 md:py-24">
@@ -201,13 +217,18 @@ export function SavingsCalculator() {
 
             <p className="relative mt-5 text-balance font-medium">{message}</p>
 
-            <Link
-              href="/contato"
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group shine glow-brand relative mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-brand px-6 py-3.5 font-semibold text-white transition-transform hover:scale-[1.02]"
             >
+              <MessageCircle size={18} className="transition-transform group-hover:scale-110" />
               Quero economizar esse tempo
-              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-            </Link>
+            </a>
+            <p className="relative mt-3 text-center text-xs text-muted">
+              Abre o WhatsApp com o seu resultado já preenchido.
+            </p>
           </motion.div>
         </div>
       </div>

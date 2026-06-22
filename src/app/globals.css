@@ -366,6 +366,53 @@ summary::-webkit-details-marker {
   cursor: grabbing;
 }
 
+/* Aurora — faixas de luz que vagam devagar pelo fundo (look premium) */
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(-8%, -4%, 0) rotate(0deg) scale(1.1);
+  }
+  50% {
+    transform: translate3d(8%, 6%, 0) rotate(10deg) scale(1.25);
+  }
+  100% {
+    transform: translate3d(-8%, -4%, 0) rotate(0deg) scale(1.1);
+  }
+}
+.animate-aurora {
+  animation: aurora-drift 24s ease-in-out infinite;
+}
+.animate-aurora-2 {
+  animation: aurora-drift 32s ease-in-out infinite reverse;
+}
+
+/* Elevação suave no hover (cartões) — toque profissional e tátil */
+.lift {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease, background-color 0.35s ease;
+}
+.lift:hover {
+  transform: translateY(-6px);
+}
+
+/* Brilho de borda que acende no hover */
+.glow-hover {
+  transition: box-shadow 0.4s ease;
+}
+.glow-hover:hover {
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 18px 50px -16px rgba(124, 58, 237, 0.55);
+}
+
+/* Sublinhado em gradiente que "cresce" sob títulos */
+@keyframes underline-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 /* Respeita quem prefere menos movimento */
 @media (prefers-reduced-motion: reduce) {
   *,

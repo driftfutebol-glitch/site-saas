@@ -26,7 +26,7 @@ export function Differentiators({ showHeading = true }: { showHeading?: boolean 
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
-              className="glass rounded-2xl p-6 transition-colors hover:bg-white/[0.06]"
+              className="glass lift glow-hover rounded-2xl p-6 hover:bg-white/[0.06]"
             >
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-cyan/20 to-brand/10 text-cyan ring-1 ring-white/10">
                 <Icon name={d.icon} className="h-6 w-6" />

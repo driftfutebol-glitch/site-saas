@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 import { EASE } from "@/lib/motion";
 
 const variants: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
 type RevealProps = {
