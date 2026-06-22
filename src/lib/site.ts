@@ -395,6 +395,49 @@ export const founderValues: FounderValue[] = [
     icon: "MessageSquare",
     title: "Conversa de gente",
     description:
-      "Você fala comigo direto, sem termo técnico complicado e sem fila de atendimento. Simples assim.",
+      "Você fala com a gente direto, sem termo técnico complicado e sem fila de atendimento. Simples assim.",
+  },
+];
+
+/* ============================================================
+   SÓCIO — Andrei
+   ============================================================ */
+
+export const partner = {
+  name: "Andrei",
+  initials: "A",
+  role: "Sócio · Tráfego Pago, IA & Design",
+  location: "Sócio da FerrazCode",
+  eyebrow: "A dupla por trás da FerrazCode",
+  headline: "Faço o seu sistema ser visto — e vender.",
+  short:
+    "Sou o Andrei, sócio do Pedro. Cuido do tráfego pago, da inteligência artificial e do design — pra que o seu sistema não só funcione, mas atraia clientes e venda de verdade.",
+  story: [
+    "Enquanto o Pedro constrói o sistema por dentro, eu cuido pra que ele dê resultado por fora. De nada adianta ter a melhor ferramenta do mundo se ninguém te encontra — então eu trago os clientes até você.",
+    "Trabalho com tráfego pago (Google e Meta Ads), inteligência artificial aplicada ao seu negócio e design que faz a sua marca ser lembrada. Junto com o desenvolvimento do Pedro, a gente entrega o pacote completo: um sistema que funciona, atrai e converte.",
+  ],
+};
+
+/** Especialidades do Andrei (página /fundador). */
+export const partnerExpertise: StackGroup[] = [
+  {
+    icon: "Megaphone",
+    title: "Tráfego Pago",
+    items: ["Google Ads", "Meta Ads (Insta & Face)", "Campanhas que vendem", "Otimização constante"],
+  },
+  {
+    icon: "Brain",
+    title: "Inteligência Artificial",
+    items: ["Sistemas com IA", "Atendimento inteligente", "Automação com IA", "Análise de dados"],
+  },
+  {
+    icon: "Palette",
+    title: "Design",
+    items: ["Identidade visual", "UI/UX", "Criativos para anúncios", "Marca que marca"],
+  },
+  {
+    icon: "Target",
+    title: "Estratégia",
+    items: ["Funil de vendas", "Posicionamento", "Foco em crescimento", "Resultados medíveis"],
   },
 ];

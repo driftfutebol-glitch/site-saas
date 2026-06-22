@@ -21,7 +21,7 @@ export function FounderHero() {
   return (
     <section className="relative px-5 pt-36 pb-16 md:pt-44 md:pb-20">
       <div className="mx-auto grid max-w-5xl items-center gap-12 lg:grid-cols-[auto_1fr]">
-        <FounderAvatar />
+        <FounderAvatar initials={founder.initials} variant="purple" />
 
         <motion.div variants={container} initial="hidden" animate="visible">
           <motion.span

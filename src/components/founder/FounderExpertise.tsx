@@ -14,9 +14,9 @@ export function FounderExpertise() {
       <section className="px-5 py-16 md:py-24">
         <div className="mx-auto max-w-6xl">
           <SectionHeading
-            eyebrow="Fullstack de verdade"
+            eyebrow="A engenharia · Pedro"
             title="Do banco de dados ao último pixel"
-            subtitle="Cuido do projeto inteiro sozinho — por isso nada se perde no caminho."
+            subtitle="A parte técnica fica com o Pedro: o projeto inteiro na mão de quem se importa, por isso nada se perde no caminho."
           />
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -52,9 +52,9 @@ export function FounderExpertise() {
       <section className="px-5 py-16 md:py-24">
         <div className="mx-auto max-w-6xl">
           <SectionHeading
-            eyebrow="No que eu acredito"
-            title="Como eu trabalho"
-            subtitle="Quatro princípios que guiam cada projeto que sai daqui."
+            eyebrow="No que a gente acredita"
+            title="Como a gente trabalha"
+            subtitle="Os princípios que guiam cada projeto que sai da FerrazCode."
           />
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

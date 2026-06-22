@@ -1,8 +1,14 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import {
+  motion,
+  useDragControls,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import { Check, GripHorizontal } from "lucide-react";
 import { LogoMark } from "@/components/ui/Logo";
 import { AuthForm } from "@/components/AuthForm";
 import { EASE } from "@/lib/motion";
@@ -20,7 +26,11 @@ type Props = {
   initialError?: string;
 };
 
-/** Tela de autenticação moderna (showcase + formulário) usada em /login e /registrar. */
+/**
+ * Tela de autenticação moderna (showcase + formulário).
+ * O card entra com um "tranco" elástico, inclina seguindo o cursor e pode ser
+ * puxado pela alça do topo — soltou, ele volta sozinho (efeito de elástico).
+ */
 export function AuthShell({
   mode,
   title,
@@ -30,14 +40,62 @@ export function AuthShell({
   benefits,
   initialError,
 }: Props) {
+  const dragControls = useDragControls();
+
+  // Inclinação suave seguindo o cursor (sensação de estar sendo "puxado").
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const rotateX = useSpring(useTransform(my, [0, 1], [7, -7]), {
+    stiffness: 140,
+    damping: 18,
+  });
+  const rotateY = useSpring(useTransform(mx, [0, 1], [-7, 7]), {
+    stiffness: 140,
+    damping: 18,
+  });
+
+  function onMove(e: React.MouseEvent<HTMLDivElement>) {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - r.left) / r.width);
+    my.set((e.clientY - r.top) / r.height);
+  }
+  function onLeave() {
+    mx.set(0.5);
+    my.set(0.5);
+  }
+
   return (
-    <section className="relative px-5 pt-28 pb-20 md:pt-32 md:pb-28">
+    <section className="relative px-5 pt-28 pb-20 [perspective:1500px] md:pt-32 md:pb-28">
       <motion.div
-        initial={{ opacity: 0, y: 28, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, ease: EASE }}
-        className="border-gradient glow-brand mx-auto grid max-w-5xl overflow-hidden rounded-3xl lg:grid-cols-2"
+        drag
+        dragControls={dragControls}
+        dragListener={false}
+        dragSnapToOrigin
+        dragElastic={0.45}
+        dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+        whileDrag={{ scale: 1.015 }}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        initial={{ opacity: 0, y: -90 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 80, damping: 10, mass: 0.9 }}
+        className="border-gradient glow-brand relative mx-auto grid max-w-5xl overflow-hidden rounded-3xl lg:grid-cols-2"
       >
+        {/* Alça de "puxar" o card */}
+        <button
+          type="button"
+          onPointerDown={(e) => dragControls.start(e)}
+          style={{ touchAction: "none" }}
+          aria-label="Arraste o card"
+          className="cursor-grab group absolute left-1/2 top-2.5 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-muted backdrop-blur transition-colors hover:bg-white/10 hover:text-white"
+        >
+          <GripHorizontal size={14} />
+          <span className="max-w-0 overflow-hidden text-[11px] font-medium opacity-0 transition-all duration-300 group-hover:max-w-[80px] group-hover:opacity-100">
+            puxa aqui
+          </span>
+        </button>
+
         {/* Showcase */}
         <div className="relative hidden flex-col justify-between gap-10 overflow-hidden bg-gradient-to-br from-surface-2 to-surface p-10 lg:flex">
           <div className="grid-bg absolute inset-0 opacity-50" />
@@ -63,7 +121,7 @@ export function AuthShell({
                 key={b}
                 initial={{ opacity: 0, x: -14 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.25 + i * 0.12, ease: EASE }}
+                transition={{ duration: 0.5, delay: 0.4 + i * 0.12, ease: EASE }}
                 className="flex items-center gap-3"
               >
                 <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-gradient-to-br from-brand to-cyan text-white">

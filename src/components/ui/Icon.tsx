@@ -1,6 +1,7 @@
 import {
   AppWindow,
   Boxes,
+  Brain,
   Car,
   Clock,
   Database,
@@ -8,12 +9,15 @@ import {
   Headset,
   Heart,
   Layers,
+  Megaphone,
   MessageSquare,
   Palette,
   Play,
   Server,
   ShieldCheck,
   Sparkles,
+  Target,
+  TrendingUp,
   User,
   UtensilsCrossed,
   Workflow,
@@ -42,6 +46,10 @@ const icons: Record<string, LucideIcon> = {
   Heart,
   Play,
   User,
+  Brain,
+  Megaphone,
+  Target,
+  TrendingUp,
 };
 
 type IconProps = {
